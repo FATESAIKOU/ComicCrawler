@@ -1,0 +1,6 @@
+PyExecJS
+beautifulsoup4
+requests
+PyMySQL
+selenium
+pysocks
