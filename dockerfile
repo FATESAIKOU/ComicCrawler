@@ -19,7 +19,16 @@ ARG PROXY_PEM
 ADD $PROXY_PEM /proxy.pem
 RUN chmod 600 /proxy.pem
 
-ARG proxy_command="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -N -D8079 -p$PROXY_PORT -4 $PROXY_USER@$PROXY_HOST -i /proxy.pem &\nwait \$!"
+ARG proxy_command="ssh \
+                    -o UserKnownHostsFile=/dev/null \
+                    -o StrictHostKeyChecking=no \
+                    -N \
+                    -D8079 \
+                    -p$PROXY_PORT \
+                    -4 \ 
+                    $PROXY_USER@$PROXY_HOST \
+                    -i /proxy.pem \
+                &\nwait \$!" 
 RUN echo "$proxy_command" > /proxy_launch.sh && \
     chmod 755 /proxy_launch.sh
 
