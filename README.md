@@ -26,13 +26,13 @@ $ ./docker_build.sh
 ```shell=
 $ ./docker_run.sh [dir] [command]
 ```
-dir: 表示容器執行時要 mount 的外部資料夾的路徑，預設會 mount 到 `/project` 中
-command: 容器要執行的指令，可以是 shell 或者指令，通常使用 `bash`
+* dir: 表示容器執行時要 mount 的外部資料夾的路徑，預設會 mount 到 `/project` 中
+* command: 容器要執行的指令，可以是 shell 或者指令，通常使用 `bash`
 
 #### 執行程式
 執行程式前需先給定要爬取的漫畫名稱，並儲存於一個檔案內，如：
 
-req.json
+req.txt
 ```
 食戟之靈
 關于我轉生後成為史萊姆的那件事
@@ -41,10 +41,10 @@ req.json
 然後以以下指令執行
 ```shell=
 $ cd /project
-$ ./do_download.sh [req.json] [dir]
+$ ./do_download.sh [req.txt] [dir]
 ```
-req.json: 包含要爬取漫畫列表的檔案
-dir: 爬取結果的輸出路徑
+* req.txt: 包含要爬取漫畫列表的檔案
+* dir: 爬取結果的輸出路徑
 
 ### 程式輸出
 程式輸出資料截結構如下：
