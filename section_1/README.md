@@ -27,11 +27,11 @@ $ ./get_comic_home.py '關于我轉生後成為史萊姆的那件事' <--- 隨�
 ### 爬取所有漫畫集數網址
 
 ```shell=
-$ ./get_episode_home.py 'https://comicbus.com/html/13313.html' <--- 將 get_comic_home.py 的輸出填入
+$ ./get_episode_urls.py 'https://comicbus.com/html/13313.html' <--- 將 get_comic_home.py 的輸出填入
 ```
 
 ### 簡單組合技
 
 ```shell=
-$ ./get_episode_home.py $(./get_comic_home.py '關于我轉生後成為史萊姆的那件事')
+$ ./get_episode_urls.py $(./get_comic_home.py '關于我轉生後成為史萊姆的那件事')
 ```
