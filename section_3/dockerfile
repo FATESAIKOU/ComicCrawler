@@ -1,0 +1,9 @@
+FROM ubuntu:18.04
+
+# 安裝必要套件跟瀏覽器
+RUN apt-get update && \
+    apt-get install -y apt-utils unzip&& \
+    apt-get install -y python3 python3-pip && \
+    apt-get install -y chromium-browser udev chromium-chromedriver
+
+RUN pip3 install selenium
