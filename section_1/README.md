@@ -2,7 +2,7 @@
 
 ## 本專案對應 Medium
 
--   [關於我想看漫畫卻不想看廣告這檔事 (6) — 實體佈署心累，那你有試過 docker 嗎？](https://seaweed-programmer.medium.com/%E9%97%9C%E6%96%BC%E6%88%91%E6%83%B3%E7%9C%8B%E6%BC%AB%E7%95%AB%E5%8D%BB%E4%B8%8D%E6%83%B3%E7%9C%8B%E5%BB%A3%E5%91%8A%E9%80%99%E6%AA%94%E4%BA%8B-5-%E5%AF%A6%E9%AB%94%E4%BD%88%E7%BD%B2%E5%BF%83%E7%B4%AF-%E9%82%A3%E4%BD%A0%E6%9C%89%E8%A9%A6%E9%81%8E-docker-%E5%97%8E-6f25001ea3d1)
+-   [關於我想看漫畫卻不想看廣告這檔事 (1)— 靜態網頁爬蟲](https://seaweed-programmer.medium.com/%E9%97%9C%E6%96%BC%E6%88%91%E6%83%B3%E7%9C%8B%E6%BC%AB%E7%95%AB%E5%8D%BB%E4%B8%8D%E6%83%B3%E7%9C%8B%E5%BB%A3%E5%91%8A%E9%80%99%E9%BB%A8%E4%BA%8B-1-%E9%9D%9C%E6%85%8B%E7%B6%B2%E9%A0%81%E7%88%AC%E8%9F%B2-f89d39a8b2f5)
 
 ## 系統需求
 
