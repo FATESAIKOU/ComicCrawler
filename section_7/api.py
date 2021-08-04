@@ -1,6 +1,5 @@
 import os
 import json
-import pymysql
 from flask import Flask, jsonify
 
 app = Flask(__name__)
