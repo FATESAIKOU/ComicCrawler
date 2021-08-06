@@ -17,3 +17,6 @@ venv/*
 .idea/*
 *.zip
 *test.txt
+terraform.tfstate*
+terraform.tfvars
+.terraform*
