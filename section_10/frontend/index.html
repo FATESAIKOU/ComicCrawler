@@ -6,7 +6,7 @@
         <script>
             function updateComic() {
                 document.querySelectorAll("option").forEach((o) => o.remove());
-                fetch("/comics/")
+                fetch("comics/")
                     .then((response) => response.json())
                     .then((comics) => {
                         for (let i in comics) {
@@ -25,7 +25,7 @@
                 document
                     .querySelectorAll("#episode option")
                     .forEach((o) => o.remove());
-                fetch("/episodeof/" + comic_id)
+                fetch("episodeof/" + comic_id)
                     .then((response) => response.json())
                     .then((episodes) => {
                         for (let i in episodes) {
@@ -44,7 +44,7 @@
                 document
                     .querySelectorAll("#image_list option")
                     .forEach((o) => o.remove());
-                fetch("/imageof/" + episode_id)
+                fetch("imageof/" + episode_id)
                     .then((response) => response.json())
                     .then((images) => {
                         for (let i in images) {
