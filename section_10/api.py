@@ -1,48 +1,47 @@
 import os
 import json
 from flask import Flask, jsonify
+from storage import S3
 
 app = Flask(__name__)
 
+BUCKET_NAME = os.environ['bucket_name']
 FSDB_ROOT = os.environ['fsdb_root']
+
+s3_storage = S3(BUCKET_NAME)
 
 
 @app.route("/", methods=['GET'])
 def showPage():
-    page_content = "pc"
-    return page_content
+    return s3_storage.downloadData('index.html')
 
 
 @app.route("/comics/", methods=['GET'])
 def getComics():
-    # comics = [
-    #    {'id': f, 'comic_name': f}
-    #    for f in sorted(os.listdir(FSDB_ROOT))
-    # ]
-    comics = ['c1', 'c2']
+    comics = [
+        {'id': f, 'comic_name': f}
+        for f in sorted(s3_storage.list(FSDB_ROOT))
+    ]
 
     return jsonify(comics)
 
 
 @app.route("/episodeof/<comic_id>", methods=['GET'])
 def getEpisodes(comic_id: str):
-    # episodes = [
-    #    {'id': os.path.join(comic_id, f), 'episode_name': f.split('.')[0]}
-    #    for f in sorted(os.listdir(os.path.join(FSDB_ROOT, comic_id)))
-    # ]
-    episodes = ['e1', 'e2']
+    episodes = [
+        {'id': os.path.join(comic_id, f), 'episode_name': f.split('.')[0]}
+        for f in sorted(s3_storage.list(FSDB_ROOT, comic_id))
+    ]
 
     return jsonify(episodes)
 
 
 @app.route("/imageof/<comic_id>/<episode_id>", methods=['GET'])
 def getImages(comic_id: str, episode_id: str):
-    # with open(os.path.join(FSDB_ROOT, comic_id, episode_id), 'r') as src:
-    #    images = [
-    #        {'image_url': i}
-    #        for i in json.load(src)['image_urls']
-    #    ]
-    images = ['i1', 'i2']
+    images = [
+        {'image_url': i}
+        for i in json.loads(s3_storage.downloadData(FSDB_ROOT, comic_id, episode_id))['image_urls']
+    ]
 
     return jsonify(images)
 

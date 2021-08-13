@@ -25,7 +25,7 @@
                 document
                     .querySelectorAll("#episode option")
                     .forEach((o) => o.remove());
-                fetch("/" + comic_id)
+                fetch("/episodeof/" + comic_id)
                     .then((response) => response.json())
                     .then((episodes) => {
                         for (let i in episodes) {
@@ -44,7 +44,7 @@
                 document
                     .querySelectorAll("#image_list option")
                     .forEach((o) => o.remove());
-                fetch("/" + episode_id)
+                fetch("/imageof/" + episode_id)
                     .then((response) => response.json())
                     .then((images) => {
                         for (let i in images) {

@@ -2,7 +2,8 @@ service: comic-reader
 
 useDotenv: true
 # .env file need to contain
-# fsdb_root=The s3 & path to read comic from
+# bucket_name=Name of s3 bucket
+# fsdb_root=Path to read comic from s3
 
 frameworkVersion: "1"
 
