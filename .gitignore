@@ -20,3 +20,6 @@ venv/*
 terraform.tfstate*
 terraform.tfvars
 .terraform*
+node_modules
+.env
+.serverless
