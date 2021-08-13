@@ -36,6 +36,8 @@ custom:
         - bucketName: comic-reader-bucket
           bucketPrefix: comicdb/
           localDir: ../section_6/testdb/
+        - bucketName: comic-reader-bucket
+          localDir: ./frontend/
 
 resources:
     Resources:
