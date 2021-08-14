@@ -18,7 +18,7 @@
 ### 更新 Terraform 設定檔(env/terraform.tfvars)
 
 -   使用 IAM 建立一個有足夠權限的 User (可以暫時用 Admin) - [tutorial](https://docs.aws.amazon.com/systems-manager/latest/userguide/setup-create-admin-user.html)
--   複製上一步建立 User 取得的 `aws_access_key` 與 `aws_secret_key` 並更新到 terraform.tfvars 的對應欄位。
+-   複製上一步建立 User 取得的 `aws_access_key_id` 與 `aws_secret_access_key` 並更新到 terraform.tfvars 的對應欄位。
 -   `key_name` 填入要使用的 `key_pair` 名。
 -   `private_key_path` 填入下載下來的 pem 檔案位置。
 -   `comicdb_dir` 填入要使用的漫畫資料夾路徑。（將會被複製到 EC2 內部）
