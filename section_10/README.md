@@ -2,7 +2,7 @@
 
 ## 本專案對應 Medium
 
--   [關於我想看漫畫卻不想看廣告這檔事 (10) -  使用 AWS 佈署 Serverless 網頁]()
+-   [關於我想看漫畫卻不想看廣告這檔事 (10) -  使用 AWS 佈署 Serverless 網頁](https://seaweed-programmer.medium.com/%E9%97%9C%E6%96%BC%E6%88%91%E6%83%B3%E7%9C%8B%E6%BC%AB%E7%95%AB%E5%8D%BB%E4%B8%8D%E6%83%B3%E7%9C%8B%E5%BB%A3%E5%91%8A%E9%80%99%E6%AA%94%E4%BA%8B-10-%E4%BD%BF%E7%94%A8aws%E4%BD%88%E7%BD%B2-serverless-%E7%B6%B2%E9%A0%81-7cc9b93d2e5b)
 
 ## 安裝相依套件
 
