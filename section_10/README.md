@@ -44,6 +44,20 @@ EOF
 
 另外，為避免 bucket 名稱(必須全網唯一)衝突導致部署失敗，部署前強烈建議更改 `serverless.yml` 的 `service:` 欄位。
 
+### 修改 serverless.yml 中的 comicdb 位置
+
+```yml=
+custom:
+    wsgi:
+        app: api.app
+    s3Sync:
+        - bucketName: ${self:service}-bucket
+          bucketPrefix: comicdb/
+          localDir: /PATH/TO/YOUR/COMICDIR # <--- 這邊麻煩改掉
+        - bucketName: ${self:service}-bucket
+          localDir: ./frontend/
+```
+
 ## 佈署
 
 ```shell=

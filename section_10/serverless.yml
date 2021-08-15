@@ -42,7 +42,7 @@ custom:
     s3Sync:
         - bucketName: ${self:service}-bucket
           bucketPrefix: comicdb/
-          localDir: ../section_6/testdb/
+          localDir: /PATH/TO/YOUR/COMICDIR
         - bucketName: ${self:service}-bucket
           localDir: ./frontend/
 
