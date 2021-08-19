@@ -21,7 +21,11 @@ Enter password: # 輸入 db_pass 後 Enter
 ## 加入要下載的漫畫
 
 1. 打開瀏覽器前往 http://127.0.0.1:8081
-2. 於 comicdb 的 comics 內新增一列，需填入漫畫名至 `comic_name`
+2. 用以下資訊登入
+    - 伺服器: db
+    - 使用者名稱: db_user
+    - 密碼: db_pass
+3. 於 comicdb 的 comics 內新增一列，需填入漫畫名至 `comic_name`
 
 ## 啟動漫畫閱讀器
 
