@@ -2,7 +2,7 @@ import json
 import pymysql
 
 
-class MysqlDBDriver:
+class Mysql:
     def __init__(self, db, db_host, db_port, db_user, db_password):
         self.connection = pymysql.connect(
             db=db,
