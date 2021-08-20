@@ -12,6 +12,8 @@ $ pip3 install -r requirements.txt
 
 ## 啟動資料庫
 
+記得先安裝 `docker` 與 `docker-compose`
+
 ```shell=
 $ docker-compose up -d # 等個幾秒 服務開好後
 $ cat create_table.sql | mysql -u db_user -p -h 127.0.0.1
