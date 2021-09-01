@@ -1,0 +1,10 @@
+aws_access_key = "YOURACCESSKEY_SHORTONE"
+aws_secret_key = "YOUSECRETKEY_LONGONE"
+
+key_name = "YOURKEYPAIRNAME"
+private_key_path = "/PATH/TO/YOURKEYPAIRNAME.pem"
+
+db_username = "db_user"
+db_password = "db_pass"
+
+db_sql_path = "/PATH/TO/YOUR/SQL"
