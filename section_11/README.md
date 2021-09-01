@@ -47,6 +47,9 @@ $ python3 src/api.py
 -   行為上，`crawler_main.py` 會根據 `comics` 表的漫畫順序一一爬取，直到一個漫畫爬完後才會換另外一個漫畫爬。
 
 ```shell=
+$ ssh -NfD 8079 [user]@[host] # 建立一個 ssh tunnel 給爬蟲當跳板
+# 如果機器本來就在港澳台可以不使用，但記得把 src/crawler_utils.py 第 67 行指定 proxy 的部份刪掉
+
 $ export db_host="127.0.0.1"
 $ export db_port="3306"
 $ export db_user="db_user"
