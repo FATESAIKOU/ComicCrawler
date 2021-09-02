@@ -10,8 +10,12 @@ variable "private_key_path" {}
 
 variable "db_username" {}
 variable "db_password" {}
-
 variable "db_sql_path" {}
+
+variable "proxy_user" {}
+variable "proxy_pem_path" {}
+variable "proxy_host" {}
+variable "proxy_port" {}
 
 variable "region" {
     default = "ap-northeast-1"

@@ -26,11 +26,10 @@ data "aws_ami" "ubuntu" {
 
 locals {
     src = abspath("${path.module}/../")
-    export_db_envs = <<-EOT
-        export db_host=localhost && \
-        export db_port=3306 && \
-        export db_user=${var.db_username} && \
-        export db_pass=${var.db_password}
+    ssh_cmd = <<-EOT
+        autossh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no \
+                -Nf -D8079 -p ${var.proxy_port} ${var.proxy_user}@${var.proxy_host} \
+                -i ~/proxy.pem
     EOT
 }
 
@@ -132,37 +131,86 @@ resource "aws_instance" "ec2" {
         destination = "/home/ubuntu/db_build.sql"
     }
 
+    provisioner "file" {
+        source = var.proxy_pem_path
+        destination = "/home/ubuntu/proxy.pem"
+    }
+
     provisioner "remote-exec" {
         inline = [
             # Use bash
             "#!/bin/bash",
 
             # Wait cloud-init
-            "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 1; done",
+            <<-EOT
+            while [ ! -f /var/lib/cloud/instance/boot-finished ]; do
+                echo 'Waiting for cloud-init...';
+                sleep 1;
+            done
+            EOT
+            ,
 
             # Install env
-            "sudo apt-get update -y && sudo apt-get install -y python3 python3-pip mysql-server mysql-client",
+            <<-EOT
+            sudo apt-get update -y && \
+            sudo apt-get install -y python3 python3-pip \
+                                    mysql-server mysql-client \
+                                    autossh unzip
+            EOT
+            ,
 
             # Update config of mysql
             "sudo sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/mysql.conf.d/mysqld.cnf",
 
-            # Launch and initialize db
-            "sudo service mysql restart",
-            "sudo mysql -uroot <<<'CREATE DATABASE comicdb;'",
-            "sudo mysql -uroot <<<$(cat /home/ubuntu/db_build.sql)",
-            "sudo mysql -uroot <<<\"CREATE USER '${var.db_username}'@'%' IDENTIFIED BY '${var.db_password}';\"",
-            "sudo mysql -uroot <<<\"GRANT ALL ON comicdb.* TO '${var.db_username}'@'%'\";",
+            # Launch and initialize mysql
+            <<-EOT
+            sudo service mysql restart
+            sudo mysql -uroot <<<'CREATE DATABASE comicdb;'
+            sudo mysql -uroot <<<$(cat /home/ubuntu/db_build.sql)
+            sudo mysql -uroot <<<"CREATE USER '${var.db_username}'@'%' \
+                                  IDENTIFIED BY '${var.db_password}'"
+            sudo mysql -uroot <<<"GRANT ALL ON comicdb.* TO '${var.db_username}'@'%'"
+            EOT
+            ,
 
-            # Set env
-            "${local.export_db_envs}",
-
-            # Install dependency
+            # Install requirements.txt
             "cd /home/ubuntu/$(basename ${local.src})",
             "pip3 install -r requirements.txt",
 
-            # Start reader service
-            "nohup python3 src/api.py 2>&1 1>/dev/null &",
-            "sleep 10"
+            # Start reader
+            <<-EOT
+            export db_host=localhost
+            export db_port=3306
+            export db_user=${var.db_username}
+            export db_pass=${var.db_password}
+            nohup python3 src/api.py 2>&1 1>/dev/null &
+            EOT
+            ,
+
+            # Setup script to launch ssh tunnel
+            "chmod 600 ~/proxy.pem",
+            "echo -e \"#!/usr/bin/bash\n${local.ssh_cmd}\" > ~/launch_proxy.sh",
+            "chmod u+x ~/launch_proxy.sh",
+
+            # Install Chrome, Chromedriver
+            "wget 'https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_93.0.4577.63-1_amd64.deb'",
+            "sudo apt -y install ./google-chrome-stable_93.0.4577.63-1_amd64.deb",
+            "wget 'https://chromedriver.storage.googleapis.com/93.0.4577.15/chromedriver_linux64.zip'",
+            "unzip chromedriver_linux64.zip && cp chromedriver /home/ubuntu/.local/bin",
+
+            # Register crawler to crontab
+            <<-EOT
+            (
+                crontab -l 2>/dev/null;
+                echo "*/5 * * * * ~/launch_proxy.sh && \
+                        export db_host=localhost && \
+                        export db_port=3306 && \
+                        export db_user=${var.db_username} && \
+                        export db_pass=${var.db_password} && \
+                        python3 ~/$(basename ${local.src})/src/crawler_main.py 1 && \
+                        killall -9 chromium-browser chromedriver autossh"
+            ) | crontab -
+            EOT
         ]
     }
 }
