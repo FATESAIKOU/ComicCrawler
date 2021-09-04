@@ -2,57 +2,29 @@
 
 ## 本專案對應 Medium
 
--   [關於我想看漫畫卻不想看廣告這檔事 (11) -  爬蟲 ✕  Msyql](https://seaweed-programmer.medium.com/%E9%97%9C%E6%96%BC%E6%88%91%E6%83%B3%E7%9C%8B%E6%BC%AB%E7%95%AB%E5%8D%BB%E4%B8%8D%E6%83%B3%E7%9C%8B%E5%BB%A3%E5%91%8A%E9%80%99%E6%AA%94%E4%BA%8B-11-%E7%88%AC%E8%9F%B2-msyql-637a68de94dd)
+-   [關於我想看漫畫卻不想看廣告這檔事 (13) - Terraform 佈署漫畫爬蟲 & 閱讀器](https://seaweed-programmer.medium.com/%E9%97%9C%E6%96%BC%E6%88%91%E6%83%B3%E7%9C%8B%E6%BC%AB%E7%95%AB%E5%8D%BB%E4%B8%8D%E6%83%B3%E7%9C%8B%E5%BB%A3%E5%91%8A%E9%80%99%E6%AA%94%E4%BA%8B-13-terraform-%E4%BD%88%E7%BD%B2%E6%BC%AB%E7%95%AB%E7%88%AC%E8%9F%B2-%E9%96%B1%E8%AE%80%E5%99%A8-8a24d7c79db0)
 
-## 使用前準備 - 安裝相依套件
+## 部署前需先更新 Terraform 設定檔(env/terraform.tfvars)
 
-```shell=
-$ pip3 install -r requirements.txt
-```
+-   使用 IAM 建立一個有足夠權限的 User (可以暫時用 Admin) - [tutorial](https://docs.aws.amazon.com/systems-manager/latest/userguide/setup-create-admin-user.html)
+-   複製上一步建立 User 取得的 `aws_access_key_id` 與 `aws_secret_access_key` 並更新到 terraform.tfvars 的對應欄位。
+-   `key_name` 填入要使用的 `key_pair` 名。
+-   `private_key_path` 填入下載下來的 pem 檔案位置。
+-   `db_username` 資料庫使用者
+-   `db_password` 上述資料庫使用者的密碼
+-   `db_sql_path` 初始化資料庫用的 `.sql` 檔案路徑
+-   `proxy_user` 登入跳板 server 的使用者名
+-   `proxy_pem_path` 登入跳板時的認證用 key(pem)
+-   `proxy_host` 跳板 server 路徑
+-   `proxy_port` 跳板 server port(ssh)
 
-## 啟動資料庫
-
-記得先安裝 `docker` 與 `docker-compose`
-
-```shell=
-$ docker-compose up -d # 等個幾秒 服務開好後
-$ cat create_table.sql | mysql -u db_user -p -h 127.0.0.1
-Enter password: # 輸入 db_pass 後 Enter
-```
-
-## 加入要下載的漫畫
-
-1. 打開瀏覽器前往 http://127.0.0.1:8081
-2. 用以下資訊登入
-    - 伺服器: db
-    - 使用者名稱: db_user
-    - 密碼: db_pass
-3. 於 comicdb 的 comics 內新增一列，需填入漫畫名至 `comic_name`
-
-## 啟動漫畫閱讀器
-
--   需先啟動資料庫
+## 部署
 
 ```shell=
-$ export db_host="127.0.0.1"
-$ export db_port="3306"
-$ export db_user="db_user"
-$ export db_pass="db_pass"
-$ python3 src/api.py
+$ cd env
+$ terraform init
+$ terraform plan -out dev.tfplan
+$ terraform apply dev.tfplan
 ```
 
-## 執行漫畫爬蟲
-
--   需先啟動資料庫
--   行為上，`crawler_main.py` 會根據 `comics` 表的漫畫順序一一爬取，直到一個漫畫爬完後才會換另外一個漫畫爬。
-
-```shell=
-$ ssh -NfD 8079 [user]@[host] # 建立一個 ssh tunnel 給爬蟲當跳板
-# 如果機器本來就在港澳台可以不使用，但記得把 src/crawler_utils.py 第 67 行指定 proxy 的部份刪掉
-
-$ export db_host="127.0.0.1"
-$ export db_port="3306"
-$ export db_user="db_user"
-$ export db_pass="db_pass"
-$ python3 crawler_main.py [num] # num 為要下載的最大集數
-```
+然後就完成了(撒花)

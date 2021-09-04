@@ -208,7 +208,7 @@ resource "aws_instance" "ec2" {
                         export db_user=${var.db_username} && \
                         export db_pass=${var.db_password} && \
                         python3 ~/$(basename ${local.src})/src/crawler_main.py 1 && \
-                        killall -9 chromium-browser chromedriver autossh"
+                        killall -9 chromium-browser chromedriver autossh ssh"
             ) | crontab -
             EOT
         ]
