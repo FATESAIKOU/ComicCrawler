@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Comic</title>
+        <script>
+            function updateComic() {
+                document.querySelectorAll("option").forEach((o) => o.remove());
+                fetch("comics/")
+                    .then((response) => response.json())
+                    .then((comics) => {
+                        for (let i in comics) {
+                            addOption(
+                                comics[i].id,
+                                comics[i].comic_name,
+                                "comic"
+                            );
+                        }
+                    })
+                    .then((_) => updateEpisode());
+            }
+
+            function updateEpisode() {
+                const comic_id = document.getElementById("comic").value;
+                document
+                    .querySelectorAll("#episode option")
+                    .forEach((o) => o.remove());
+                fetch("episodeof/" + comic_id)
+                    .then((response) => response.json())
+                    .then((episodes) => {
+                        for (let i in episodes) {
+                            addOption(
+                                episodes[i].id,
+                                episodes[i].episode_name,
+                                "episode"
+                            );
+                        }
+                    })
+                    .then((_) => updateImageList());
+            }
+
+            function updateImageList() {
+                const episode_id = document.getElementById("episode").value;
+                document
+                    .querySelectorAll("#image_list option")
+                    .forEach((o) => o.remove());
+                fetch("imageof/" + episode_id)
+                    .then((response) => response.json())
+                    .then((images) => {
+                        for (let i in images) {
+                            addOption(
+                                images[i].image_url,
+                                images[i].image_url,
+                                "image_list"
+                            );
+                        }
+                    })
+                    .then((_) => updatePic());
+            }
+
+            function updatePic() {
+                const image_url = document.getElementById("image_list").value;
+                document.getElementById("pic").src = image_url;
+            }
+
+            function addOption(id, text, selection_id) {
+                const option = document.createElement("option");
+                option.text = text;
+                option.value = id;
+
+                const select = document.getElementById(selection_id);
+                select.appendChild(option);
+            }
+
+            function nextPage() {
+                const e_s = document.getElementById("episode");
+                const im_s = document.getElementById("image_list");
+
+                if (im_s.length > im_s.selectedIndex + 1) {
+                    im_s.selectedIndex += 1;
+                } else if (e_s.length > e_s.selectedIndex + 1) {
+                    e_s.selectedIndex += 1;
+                    updateImageList();
+                } else {
+                    alert("沒有下一頁了");
+                }
+
+                updatePic();
+            }
+        </script>
+    </head>
+    <body onload="updateComic()">
+        Choose a comic:
+        <select name="comic" id="comic" onchange="updateEpisode()"></select>
+        <br />
+
+        Choose a episode:
+        <select
+            name="episode"
+            id="episode"
+            onchange="updateImageList()"
+        ></select>
+        <br />
+
+        Choose a page:
+        <select
+            name="image_list"
+            id="image_list"
+            onchange="updatePic()"
+        ></select>
+        <br />
+
+        <img id="pic" onclick="nextPage()" />
+    </body>
+</html>
