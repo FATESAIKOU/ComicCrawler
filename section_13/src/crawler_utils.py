@@ -16,10 +16,10 @@ def doRequest(url):
 def getComicHome(pattern):
     resp = doRequest(
         'https://comicbus.com/member/search.aspx?' +
-        urllib.parse.urlencode({"key": pattern}, encoding='big5'))
+        urllib.parse.urlencode({"key": pattern}, encoding='utf-8'))
 
     page = Soup(resp.content.decode(
-        'big5', errors='ignore'), features="html.parser")
+        'utf-8', errors='ignore'), features="html.parser")
     rows = page.find_all('div', class_="cat2_list text-center mb-4")
 
     results = []
@@ -36,7 +36,7 @@ def getEpisodes(comic_url):
     resp = doRequest(comic_url)
 
     page = Soup(resp.content.decode(
-        'big5', errors='ignore'), features="html.parser")
+        'utf-8', errors='ignore'), features="html.parser")
     rows = page.find_all('a', {"href": "#", "class": re.compile(r"Ch|Vol")})
 
     episodes = {}

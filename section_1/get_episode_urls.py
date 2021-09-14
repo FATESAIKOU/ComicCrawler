@@ -18,7 +18,7 @@ def searchEpisode(comic_url):
     resp = doRequest(comic_url)
 
     page = Soup(resp.content.decode(
-        'big5', errors='ignore'), features="html.parser")
+        'utf-8', errors='ignore'), features="html.parser")
     rows = page.find_all('a', {"href": "#", "class": re.compile(r"Ch|Vol")})
 
     episodes = {}
