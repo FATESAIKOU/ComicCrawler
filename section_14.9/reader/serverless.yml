@@ -1,0 +1,42 @@
+service: comic-reader
+
+useDotenv: true
+# .env file need to contain
+# db_host: The ip/domain of db
+# db_port: The port to connect to db
+# db_name: The database name to use
+# db_user: username
+# db_pass: password
+
+frameworkVersion: "1"
+
+provider:
+    name: aws
+    runtime: python3.8
+    stage: dev
+    region: ap-northeast-1
+
+functions:
+    api:
+        handler: wsgi_handler.handler
+        events:
+            - http:
+                  path: /
+                  method: get
+            - http:
+                  path: comics
+                  method: get
+            - http:
+                  path: episodeof/{comic_id}
+                  method: get
+            - http:
+                  path: imageof/{episode_id}
+                  method: get
+custom:
+    wsgi:
+        app: api.app
+
+plugins:
+    - serverless-python-requirements
+    - serverless-dotenv-plugin
+    - serverless-wsgi
