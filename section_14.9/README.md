@@ -2,7 +2,7 @@
 
 ## 本專案對應 Medium
 
--   [關於我想看漫畫卻不想看廣告這檔事 (14.9)]()
+-   [關於我想看漫畫卻不想看廣告這檔事 (14.9) — 使用 Terraform & Serverless Framework 佈署漫畫爬蟲與閱讀器](https://seaweed-programmer.medium.com/%E9%97%9C%E6%96%BC%E6%88%91%E6%83%B3%E7%9C%8B%E6%BC%AB%E7%95%AB%E5%8D%BB%E4%B8%8D%E6%83%B3%E7%9C%8B%E5%BB%A3%E5%91%8A%E9%80%99%E6%AA%94%E4%BA%8B-14-9-%E4%BD%BF%E7%94%A8-terraform-serverless-framework-%E4%BD%88%E7%BD%B2%E6%BC%AB%E7%95%AB%E7%88%AC%E8%9F%B2%E8%88%87%E9%96%B1%E8%AE%80%E5%99%A8-a0a858b8977d)
 
 ## 部署前需先完成 Terraform 設定檔(crawler/env/terraform.tfvars, 參考 crawler/env/terraform.tfvars.sample)
 
