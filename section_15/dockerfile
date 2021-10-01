@@ -1,0 +1,8 @@
+FROM amazon/aws-lambda-python:3.7
+MAINTAINER FATESAIKOU
+
+# Add main file
+ARG MAIN_PY
+ADD $MAIN_PY ${LAMBDA_TASK_ROOT}/lambda_main.py
+
+CMD [ "lambda_main.handler" ]
