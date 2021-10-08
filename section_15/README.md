@@ -2,7 +2,7 @@
 
 ## 本專案對應 Medium
 
--   [關於我想看漫畫卻不想看廣告這檔事 (15) — ]()
+-   [關於我想看漫畫卻不想看廣告這檔事 (15) — ](https://seaweed-programmer.medium.com/%E9%97%9C%E6%96%BC%E6%88%91%E6%83%B3%E7%9C%8B%E6%BC%AB%E7%95%AB%E5%8D%BB%E4%B8%8D%E6%83%B3%E7%9C%8B%E5%BB%A3%E5%91%8A%E9%80%99%E6%AA%94%E4%BA%8B-15-%E4%BD%BF%E7%94%A8-terraform-%E4%BD%88%E7%BD%B2-aws-ecr-aws-lambda-be489f28e86)
 
 ## 部署前需先完成 Terraform 設定檔(terraform.tfvars, 參考 terraform.tfvars.sample)
 
