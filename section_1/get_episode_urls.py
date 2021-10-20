@@ -31,7 +31,7 @@ def searchEpisode(comic_url):
         episode_infos = \
             re.search('\'([\w|\d|-]*.html)\',(\d*),(\d*)',
                       row['onclick']).groups()
-        episodes[title] = 'https://comic.aya.click/online/best_' + \
+        episodes[title] = 'https://comicabc.com/online/new-' + \
             episode_infos[0].replace('.html', '').replace('-', '.html?ch=')
 
     return episodes

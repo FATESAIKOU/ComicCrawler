@@ -41,7 +41,7 @@ PS: `-4` 是由於 docker 內部基本使用 ipv6 通訊，這樣在與 ipv4 的
 
 ```shell=
 root@xxxxxxxxxxxx:/# cd /project
-root@xxxxxxxxxxxx:/# ./get_image.py 'https://comic.aya.click/online/best_13313.html?ch=85'
+root@xxxxxxxxxxxx:/# ./get_image.py 'https://comicabc.com/online/new-13313.html?ch=85'
 ```
 
 網址的部份可以自由替換成其他漫畫集數的網址。
