@@ -1,0 +1,11 @@
+aws_access_key = "YOURACCESSKEY_SHORTONE"
+aws_secret_key = "YOUSECRETKEY_LONGONE"
+
+db_username = "db_user"
+db_password = "db_pass"
+db_sql_path = "/PATH/TO/YOUR/SQL"
+
+proxy_user = "SSH_USER"
+proxy_pem_path = "PEM_FOR_SSH"
+proxy_host = "SSH_HOST"
+proxy_port = "SSH_PORT"
