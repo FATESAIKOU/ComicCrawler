@@ -1,0 +1,37 @@
+name: Section 17 crawler test
+
+on:
+    workflow_dispatch:
+jobs:
+    test-crawler:
+        name: test-crawler
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v1
+
+            - name: Set PEM
+              run: 'echo "$PEM" > section_17/proxy.pem'
+              env:
+                  PEM: ${{secrets.PEM}}
+            - name: Build image
+              uses: docker/build-push-action@v2
+              with:
+                  context: section_17
+                  tags: test-image:latest
+                  push: false
+                  build-args: |
+                      PROXY_PEM=proxy.pem
+                      PROXY_HOST=${{ secrets.PROXY_HOST }}
+                      PROXY_PORT=${{ secrets.PROXY_PORT }}
+                      PROXY_USER=${{ secrets.PROXY_USER }}
+                      SRC=.
+
+            - name: Test Crawler
+              uses: addnab/docker-run-action@v3
+              with:
+                  image: test-image:latest
+                  run: |-
+                      chmod 600 /proxy.pem
+                      /proxy_launch.sh &
+                      python3 src/crawler_test.py
