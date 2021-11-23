@@ -17,7 +17,7 @@ def doRequest(url):
 
 def getComicHome(pattern):
     resp = doRequest(
-        'https://comicbus.com/member/search.aspx?' +
+        'https://www.comicabc.com/member/search.aspx?' +
         urllib.parse.urlencode({"key": pattern}, encoding='utf-8'))
 
     page = Soup(resp.content.decode(
@@ -29,7 +29,7 @@ def getComicHome(pattern):
         title = row.find('span').getText()
 
         if title == pattern:
-            return 'https://comicbus.com' + row.find('a', href=True)['href']
+            return row.find('a', href=True)['href']
 
     return None
 
@@ -51,7 +51,7 @@ def getEpisodes(comic_url):
         episode_infos = \
             re.search('\'([\w|\d|-]*.html)\',(\d*),(\d*)',
                       row['onclick']).groups()
-        episodes[title] = 'https://comicabc.com/online/new-' + \
+        episodes[title] = 'https://www.comicabc.com/online/new-' + \
             episode_infos[0].replace('.html', '').replace('-', '.html?ch=')
 
     return episodes
