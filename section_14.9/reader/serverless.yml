@@ -8,7 +8,7 @@ useDotenv: true
 # db_user: username
 # db_pass: password
 
-frameworkVersion: "1"
+frameworkVersion: "2"
 
 provider:
     name: aws

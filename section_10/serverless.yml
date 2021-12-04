@@ -5,7 +5,7 @@ useDotenv: true
 # bucket_name=Name of s3 bucket
 # fsdb_root=Path to read comic from s3
 
-frameworkVersion: "1"
+frameworkVersion: "2"
 
 provider:
     name: aws
