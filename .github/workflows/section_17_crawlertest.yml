@@ -13,7 +13,7 @@ jobs:
             - name: Set PEM
               run: 'echo "$PEM" > section_17/proxy.pem'
               env:
-                  PEM: ${{secrets.PEM}}
+                  PEM: ${{secrets.PROXY_PEM}}
             - name: Build image
               uses: docker/build-push-action@v2
               with:
