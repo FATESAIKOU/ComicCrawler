@@ -1,0 +1,116 @@
+name: Deploy to aws
+
+on:
+    workflow_dispatch:
+jobs:
+    test-crawler-before-deploy-to-aws:
+        name: test-crawler-befoer-deploy-to-aws
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+
+            - name: Set PEM & SQL
+              run: |-
+                  echo "$PEM" > section_18/crawler/proxy.pem
+              env:
+                  PEM: ${{ secrets.PROXY_PEM }}
+                  SQL: ${{ secrets.DB_SQL }}
+
+            - name: Test comic crawler
+              uses: docker/build-push-action@v2
+              with:
+                  context: section_18/crawler
+                  tags: test-image:latest
+                  push: false
+                  build-args: |
+                      PROXY_PEM=proxy.pem
+                      PROXY_HOST=${{ secrets.PROXY_HOST }}
+                      PROXY_PORT=${{ secrets.PROXY_PORT }}
+                      PROXY_USER=${{ secrets.PROXY_USER }}
+                      SRC=src
+            - uses: addnab/docker-run-action@v3
+              with:
+                  image: test-image:latest
+                  run: |-
+                      chmod 600 /proxy.pem
+                      /proxy_launch.sh &
+                      python3 crawler_test.py
+
+    deploy-to-aws:
+        needs: test-crawler-before-deploy-to-aws
+        name: deploy-to-aws
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+
+            - name: Set PEM & SQL
+              run: |-
+                  echo "$PEM" > section_18/crawler/proxy.pem
+                  echo "$SQL" > section_18/crawler/init.sql
+              env:
+                  PEM: ${{ secrets.PROXY_PEM }}
+                  SQL: ${{ secrets.DB_SQL }}
+
+            - name: Install mysql client
+              run: sudo apt-get update && sudo apt-get install -y mysql-client-8.0
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v1
+            - name: Set up for Amazon ECR
+              uses: aws-actions/configure-aws-credentials@v1
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: ap-northeast-1
+
+            - name: Login to Amazon ECR
+              uses: aws-actions/amazon-ecr-login@v1
+            - name: Login to Terraform cloud
+              uses: hashicorp/setup-terraform@v1
+              with:
+                  cli_config_credentials_hostname: "app.terraform.io"
+                  cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+            - name: Deploy crawler with terraform
+              run: |-
+                  cd section_18/crawler/env
+                  terraform init
+                  terraform plan -out dev.tfplan
+                  terraform apply dev.tfplan || touch build_failed.txt
+                  if [ -f "build_failed.txt" ]
+                  then
+                    terraform plan -destroy -out destroy.tfplan && terraform apply destroy.tfplan
+                    exit 1
+                  fi
+
+                  terraform output -json | grep -v '::' | grep -v 'command' | jq -r 'keys[] as $k | "\($k)=\(.[$k].value)"' > ../../reader/.env
+              env:
+                  TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  TF_VAR_db_username: ${{ secrets.DB_USER }}
+                  TF_VAR_db_password: ${{ secrets.DB_PASS }}
+                  TF_VAR_db_sql_path: ../init.sql
+                  TF_VAR_proxy_user: ${{ secrets.PROXY_USER }}
+                  TF_VAR_proxy_host: ${{ secrets.PROXY_HOST }}
+                  TF_VAR_proxy_port: ${{ secrets.PROXY_PORT }}
+                  TF_VAR_proxy_pem: proxy.pem
+
+            - name: Use Python
+              uses: actions/setup-python@v2
+              with:
+                  python-version: "3.8"
+
+            - name: Use Node.js
+              uses: actions/setup-node@v1
+            - name: Install serverless dependency
+              run: |-
+                  cd section_18/reader
+                  npm i serverless
+                  npm i serverless-python-requirements serverless-dotenv-plugin serverless-wsgi
+
+            - name: Deploy reader with serverless framework
+              run: |-
+                  cd section_18/reader
+                  node_modules/.bin/serverless deploy
+              env:
+                  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
