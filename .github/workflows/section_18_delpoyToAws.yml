@@ -4,17 +4,16 @@ on:
     workflow_dispatch:
 jobs:
     test-crawler-before-deploy-to-aws:
-        name: test-crawler-befoer-deploy-to-aws
+        name: test-crawler
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v1
 
-            - name: Set PEM & SQL
+            - name: Set PEM
               run: |-
                   echo "$PEM" > section_18/crawler/proxy.pem
               env:
                   PEM: ${{ secrets.PROXY_PEM }}
-                  SQL: ${{ secrets.DB_SQL }}
 
             - name: Test comic crawler
               uses: docker/build-push-action@v2
